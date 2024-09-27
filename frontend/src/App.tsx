@@ -1,19 +1,36 @@
+import { useState } from "react";
 import Grid from "./components/Grid";
+import Total from "./components/Total";
+import type { Student } from "./components/Types";
 
-const students = [
-  { id: "1", name: "Ola Nordmann" },
-  { id: "2", name: "Kari Nordmann" },
-  { id: "3", name: "Per Hansen" },
-  { id: "4", name: "Anne Olsen" },
-  { id: "5", name: "Marius Berg" }
-];      
+const intitalStudent = [
+    { id: "1", name: "Ola Normann" },
+    { id: "2", name: "Kari Normann" },
+];
 
 function App() {
-  return (
-    <main>
-      <Grid students={students}/>
-    </main>
-  ) 
+    // students ?? []
+    const [students, setStudents] = useState<Student[]>(intitalStudent ?? []);
+
+    const onAddStudent = (student: Omit<Student, "id">) => {
+        setStudents((prev) => [...prev, { id: crypto.randomUUID(), ...student }]);
+    };
+
+    const onRemoveStudent = (id: string) => {
+        setStudents((prev) => prev.filter((student) => student.id !== id));
+    };
+
+    return (
+        <main>
+            {/* <Student name="Marius" id="123" /> */}
+            <Grid
+                students={students}
+                onAddStudent={onAddStudent}
+                onRemoveStudent={onRemoveStudent}
+            />
+            <Total total={students.length} />
+        </main>
+    );
 }
 
 export default App;
